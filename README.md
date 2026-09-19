@@ -241,26 +241,26 @@ class PetStore {
 
 Whenever we want to say that an object being passed around has a specific set of attributes, we can use an interface. Interfaces are nifty little tools that come in handy in several situations.
 
-The most immediate one that comes to mind is testing. Suppose we have a method in our `Dog` class that makes an I/O call, and we want to unit test a method in our `PetStore` class that calls it. We don't want to fire an I/O call every time a unit test runs, but we still need an object that satisfies the `Dog` type. Let's create an `iDog` interface that specifies a method for both the real class and the mock class we create for our unit test.
+The most immediate one that comes to mind is testing. Suppose we have a method in our `Dog` class that makes an I/O call, and we want to unit test a method in our `PetStore` class that calls it. We don't want to fire an I/O call every time a unit test runs, but we still need an object that satisfies the `Dog` type. Let's create an `IDog` interface that specifies a method for both the real class and the mock class we create for our unit test.
 
 ```ts
-interface iDog {
+interface IDog {
   getPedigree: Function;
 }
 
-class Dog implements iDog {
+class Dog implements IDog {
   getPedigree(): Promise<Pedigree> {
     return someThirdPartyIoCall("...");
   }
 }
 
-class MockDog implements iDog {
+class MockDog implements IDog {
   getPedigree(): Promise<Pedigree> {
     return Promise.resolve(new DummyPedigreeObject());
   }
 }
 
-async function methodToBeTested(dog: iDog): Promise<void> {
+async function methodToBeTested(dog: IDog): Promise<void> {
   try {
     let pedigree = await dog.getPedigree();
     // do assertions here

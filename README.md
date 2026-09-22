@@ -2,8 +2,6 @@
 
 _All the major aspects of TypeScript objects in one place so you don't have to google around for them_
 
-If you come from a traditional object-oriented (OO) background like me and are daunted by the quirks of JavaScript, never fear: TypeScript has got you covered. This tutorial skims through all the major points of TypeScript objects, giving examples along the way and showing you when they come in handy. The features of TypeScript objects overlap heavily with traditional OO languages like Java and C#, so if you're a seasoned programmer, you may already be familiar with some of these points. If not, this will be a great overview of OO-style programming.
-
 <p align="center">· · ·</p>
 
 ## Table of Contents

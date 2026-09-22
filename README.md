@@ -9,10 +9,11 @@ _All the major aspects of TypeScript objects in one place so you don't have to g
 - [TypeScript Objects vs. JavaScript Objects](#typescript-objects-vs-javascript-objects)
 - [Object Overview](#object-overview)
 - [Inheritance](#inheritance)
-- [Access Control](#access-control)
+- [Encapsulation](#Encapsulation)
 - [Other Modifiers](#other-modifiers)
-- [Interfaces](#interfaces)
-- [Abstract Classes and Methods](#abstract-classes-and-methods)
+- [Polymorphism](#polymorphism)
+  - [Interfaces](#interfaces)
+  - [Abstract Classes and Methods](#abstract-classes-and-methods)
 - [Conclusion](#conclusion)
 
 <p align="center">· · ·</p>
@@ -127,9 +128,9 @@ JavaScript inheritance works the same way, but TypeScript adds access-control mo
 
 <p align="center">· · ·</p>
 
-## Access Control
+## Encapsulation
 
-Access control refers to where we can use a class's attributes and methods. If you've ever skimmed through code in an OO language, you might have noticed keywords like `public`, `private`, and `protected`. Let's go over what each one of these is for and why they are useful.
+### `public`
 
 Suppose our PetStore program has a class named `PetStore`. If this class wants to call methods on our `Dog` objects, then those methods will need to be marked `public`. When a method or variable is public, it can be accessed by other parts of our program. Leaving off a modifier on a variable or method is the same as marking it `public`.
 
@@ -148,6 +149,8 @@ class PetStore {
   }
 }
 ```
+
+### `private`
 
 Allowing other coders to directly access an object's attributes generally isn't a good idea, though. It's better to use getters and setters to access and modify class properties, so we can run some logic when setting a value and prevent errors. For example, a dog's name shouldn't be falsy, and it should be under a certain length; a realistic dog name would never be more than 10–20 characters. To make a class variable or method accessible only within that class, we mark it `private`. TypeScript classes have built-in `get` and `set` accessors, which trigger our getter and setter whenever the property is accessed or assigned.
 
@@ -169,20 +172,43 @@ class Dog {
 }
 
 class PetStore {
-  private _dogs: Array<Dog>; // we changed this to private too
+  private dogs: Array<Dog>; // we changed this to private too
 
   constructor() {
-    this._dogs = [new Dog()];
-    this._dogs[0].name = "Fido"; // will call 'set'
+    this.dogs = [new Dog()];
+    this.dogs[0].name = "Fido"; // will call 'set'
   }
 
   printAllDogNames(): void {
-    this._dogs.forEach((dog) => {
+    this.dogs.forEach((dog) => {
       console.log(dog.name); // will call 'get'
     });
   }
 }
 ```
+
+### `#` a new alternative to `private`
+
+Unlike `private` this provides both compile-time AND runtime safety. 
+
+```ts
+class PetStore {
+  #dogs: Array<Dog>; // we changed this to private too
+
+  constructor() {
+    this.#dogs = [new Dog()];
+    this.#dogs[0].name = "Fido"; // will call 'set'
+  }
+
+  printAllDogNames(): void {
+    this.#dogs.forEach((dog) => {
+      console.log(dog.name); // will call 'get'
+    });
+  }
+}
+```
+
+### `protected`
 
 Lastly, let's look at the `protected` keyword. Protected means that a variable or method can only be accessed within the class itself and its child classes. Remember the `makeSound_` method of the `Animal` parent class? We shouldn't be able to call that method externally on `Animal` or any class that inherits from it, because not all animals make sounds. I like to append a trailing underscore to protected members, although it's not a convention.
 
@@ -216,6 +242,8 @@ class PetStore {
 
 ## Other Modifiers
 
+### `static`
+
 There are two other modifiers that are important to mention when talking about TypeScript classes: `static` and `readonly`. If we want to access a property on a class without going through the trouble of creating an instance-object (calling the class with `new`), we can mark it `static`, and it will be set on the class (function-object) itself. This is useful for methods and class variables that don't depend on any dynamic property. For example, a dog will always be the same species.
 
 ```ts
@@ -231,6 +259,8 @@ class PetStore {
   }
 }
 ```
+
+### `readonly`
 
 The `readonly` keyword is pretty self-explanatory. It's used for class-level variables and means that the value cannot be reassigned. Values that are initialized when the class is created and that you know will never change should be `readonly`. Our `Dog` class's `species` property is a good example: no matter what attributes we assign to a dog, it will always be the same species.
 
@@ -249,7 +279,9 @@ class PetStore {
 
 <p align="center">· · ·</p>
 
-## Interfaces
+## Polymorphism
+
+### `interface`
 
 Whenever we want to say that an object being passed around has a specific set of attributes, we can use an interface. Interfaces are nifty little tools that come in handy in several situations.
 
@@ -290,9 +322,9 @@ methodToBeTested(new MockDog());
 
 This is only one small example of using interfaces; there are plenty more uses. I recommend checking out the TypeScript docs [here](https://www.typescriptlang.org/docs/handbook/interfaces.html) for more information.
 
-<p align="center">· · ·</p>
+## Abstraction
 
-## Abstract Classes and Methods
+## `abstract`
 
 Think of abstract classes as a cross between regular parent classes and interfaces. Like interfaces, abstract classes define attributes for other classes, but unlike interfaces, some of their methods may contain an implementation. A method without an implementation must be marked `abstract`, and so must its containing class. Abstract classes cannot be instantiated (you can't use `new` on them) and are useful when you know you'll never need the parent class directly.
 
@@ -319,9 +351,3 @@ class Cat extends Animal {
 ```
 
 > **Note:** This is not meant to be an accurate representation of how to calculate a cat's or a dog's age.
-
-<p align="center">· · ·</p>
-
-## Conclusion
-
-There is way more to TypeScript classes than what was covered in this tutorial, but hopefully this quick rundown helped put things into perspective. Whether or not you or others intend to use TypeScript extensively, the object-oriented concepts covered here overlap so much with other OO languages that it's still a very useful read. TypeScript is also nice for learning OO because it's a much less formal language than Java, C#, or C++.

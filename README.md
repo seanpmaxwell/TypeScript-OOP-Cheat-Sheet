@@ -4,6 +4,8 @@ _All the major aspects of TypeScript objects in one place so you don't have to g
 
 If you come from a traditional object-oriented (OO) background like me and are daunted by the quirks of JavaScript, never fear: TypeScript has got you covered. This tutorial skims through all the major points of TypeScript objects, giving examples along the way and showing you when they come in handy. The features of TypeScript objects overlap heavily with traditional OO languages like Java and C#, so if you're a seasoned programmer, you may already be familiar with some of these points. If not, this will be a great overview of OO-style programming.
 
+<p align="center">· · ·</p>
+
 ## Table of Contents
 
 - [TypeScript Objects vs. JavaScript Objects](#typescript-objects-vs-javascript-objects)
@@ -15,9 +17,13 @@ If you come from a traditional object-oriented (OO) background like me and are d
 - [Abstract Classes and Methods](#abstract-classes-and-methods)
 - [Conclusion](#conclusion)
 
+<p align="center">· · ·</p>
+
 ## TypeScript Objects vs. JavaScript Objects
 
 TypeScript objects are just syntactic sugar for JavaScript function-objects. There's a lot of repetitive code involved in using function-objects as classes in JavaScript, which is why `class` was introduced in ES6. TypeScript takes ES6 classes to a higher plane of reality by adding not only types but also object features such as `public`, `private`, `abstract`, etc. If you're interested in learning more about the quirks of JavaScript function-objects (which I highly recommend), please check out my Medium article [here](https://levelup.gitconnected.com/the-javascript-object-paradigm-and-prototypes-explained-simply-e9cb9eaa49aa).
+
+<p align="center">· · ·</p>
 
 ## Object Overview
 
@@ -59,6 +65,8 @@ Dog.prototype.getRelativeAge = function () {
 
 var Spot = new Dog(2, "Labrador");
 ```
+
+<p align="center">· · ·</p>
 
 ## Inheritance
 
@@ -118,6 +126,8 @@ class Cat extends Animal {
 ```
 
 JavaScript inheritance works the same way, but TypeScript adds access-control modifiers when working with parent classes. Declaring class-level variables outside of methods (class fields) wasn't possible in ES6, but modern JavaScript supports it as of ES2022, along with truly private `#fields`.
+
+<p align="center">· · ·</p>
 
 ## Access Control
 
@@ -204,6 +214,8 @@ class PetStore {
 }
 ```
 
+<p align="center">· · ·</p>
+
 ## Other Modifiers
 
 There are two other modifiers that are important to mention when talking about TypeScript classes: `static` and `readonly`. If we want to access a property on a class without going through the trouble of creating an instance-object (calling the class with `new`), we can mark it `static`, and it will be set on the class (function-object) itself. This is useful for methods and class variables that don't depend on any dynamic property. For example, a dog will always be the same species.
@@ -236,6 +248,8 @@ class PetStore {
   }
 }
 ```
+
+<p align="center">· · ·</p>
 
 ## Interfaces
 
@@ -278,6 +292,8 @@ methodToBeTested(new MockDog());
 
 This is only one small example of using interfaces; there are plenty more uses. I recommend checking out the TypeScript docs [here](https://www.typescriptlang.org/docs/handbook/interfaces.html) for more information.
 
+<p align="center">· · ·</p>
+
 ## Abstract Classes and Methods
 
 Think of abstract classes as a cross between regular parent classes and interfaces. Like interfaces, abstract classes define attributes for other classes, but unlike interfaces, some of their methods may contain an implementation. A method without an implementation must be marked `abstract`, and so must its containing class. Abstract classes cannot be instantiated (you can't use `new` on them) and are useful when you know you'll never need the parent class directly.
@@ -305,6 +321,8 @@ class Cat extends Animal {
 ```
 
 > **Note:** This is not meant to be an accurate representation of how to calculate a cat's or a dog's age.
+
+<p align="center">· · ·</p>
 
 ## Conclusion
 

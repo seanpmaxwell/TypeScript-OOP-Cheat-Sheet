@@ -1,34 +1,28 @@
-# TypeScript Object-Oriented Concepts in a Nutshell
+# TypeScript Object-Oriented Cheat Sheet
 
-_All the major aspects of TypeScript objects in one place so you don't have to google around for them_
-
-<p align="center">· · ·</p>
+_All the major parts of TypeScript object-oriented keywords/terminology in one place_
 
 ## Table of Contents
 
+- [Overview](#overview)
 - [TypeScript Objects vs. JavaScript Objects](#typescript-objects-vs-javascript-objects)
-- [Object Overview](#object-overview)
+- [Objects and Classes Overview](#object-overview)
 - [Inheritance](#inheritance)
 - [Encapsulation](#Encapsulation)
 - [Other Modifiers](#other-modifiers)
 - [Polymorphism](#polymorphism)
   - [Interfaces](#interfaces)
-  - [Abstract Classes and Methods](#abstract-classes-and-methods)
+- [Abstract Classes and Methods](#abstract-classes-and-methods)
 - [Conclusion](#conclusion)
 
 <p align="center">· · ·</p>
 
-## TypeScript Objects vs. JavaScript Objects
+## Overview
 
-TypeScript objects are just syntactic sugar for JavaScript function-objects. There's a lot of repetitive code involved in using function-objects as classes in JavaScript, which is why `class` was introduced in ES6. TypeScript takes ES6 classes to a higher plane of reality by adding not only types but also object features such as `public`, `private`, `abstract`, etc. If you're interested in learning more about the quirks of JavaScript function-objects (which I highly recommend), please check out my Medium article [here](https://levelup.gitconnected.com/the-javascript-object-paradigm-and-prototypes-explained-simply-e9cb9eaa49aa).
+<details>
+<summary>Classes vs Factory functions</summary>
 
-<p align="center">· · ·</p>
-
-## Object Overview
-
-Objects in TypeScript (as in all of OO programming) are useful because they let us model our program on real-world scenarios. Objects are instances (particular variables with that class as their value type) of classes. Think of classes as just a group of methods and variables. Let's say we wanted to build a program called PetStore that only sells cats and dogs. A dog could have attributes like `age` and `breed`, but also methods like `getRelativeAge` if we want its age in dog years. If we're talking about a particular dog object such as `Spot` or `Bingo`, which have values set for their attributes, then those objects are instances of the `Dog` class.
-
-Classes are implemented using the `class` keyword, just like in ES6. To create an object, we call the class with the `new` keyword, which triggers the constructor and returns an instance-object, just like in regular JavaScript. Since objects in JavaScript are technically just a set of key/value pairs, I like to use the term _instance-object_ to refer to objects returned by the `new` keyword.
+Classes are implemented using the `class` keyword (introduced in ES6). To create an object, we call the class with the `new` keyword, which triggers the constructor and returns an instance-object, just like in regular JavaScript. Since objects in JavaScript technically include functions, `null`, and classes too (anything where `typeof "..." === 'object'` or `"..." instanceof Object === true`), I like to use the term _instance-object_ to refer to objects returned by the `new` keyword.
 
 `Spot` is an instance-object of `Dog`:
 
@@ -64,6 +58,15 @@ Dog.prototype.getRelativeAge = function () {
 
 var Spot = new Dog(2, "Labrador");
 ```
+</details>
+
+
+<details>
+<summary>TypeScript Classes vs. JavaScript Classes</summary>
+  
+TypeScript objects are just syntactic sugar for JavaScript function-objects. There's a lot of repetitive code involved in using function-objects as classes in JavaScript, which is why `class` was introduced in ES6. TypeScript takes ES6 classes to a higher plane of reality by adding not only types but also object features such as `public`, `private`, `abstract`, etc. If you're interested in learning more about the quirks of JavaScript function-objects (which I highly recommend), please check out my Medium article [here](https://levelup.gitconnected.com/the-javascript-object-paradigm-and-prototypes-explained-simply-e9cb9eaa49aa).
+
+</details>
 
 <p align="center">· · ·</p>
 
@@ -322,7 +325,7 @@ methodToBeTested(new MockDog());
 
 This is only one small example of using interfaces; there are plenty more uses. I recommend checking out the TypeScript docs [here](https://www.typescriptlang.org/docs/handbook/interfaces.html) for more information.
 
-## Abstraction
+## Abstract Classes and Methods
 
 ## `abstract`
 

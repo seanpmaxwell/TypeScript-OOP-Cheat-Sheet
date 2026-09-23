@@ -2,7 +2,9 @@
 
 _All of TypeScript's object-oriented keywords and terminology in one place._
 
-> **Legend:** ❌ marks a compile error, followed by TypeScript's message. 💥 marks a runtime error. Examples assume `"strict": true` and `"noImplicitOverride": true`.
+> **Legend:** ❌ marks a compile error. 💥 marks a runtime error. 
+
+> Examples assume `"strict": true` and `"noImplicitOverride": true`.
 
 ## Table of Contents
 
@@ -25,7 +27,6 @@ _All of TypeScript's object-oriented keywords and terminology in one place._
   - [`static`](#static)
   - [`readonly`](#readonly)
 - [Quick Reference](#quick-reference)
-- [Conclusion](#conclusion)
 
 ## Overview
 

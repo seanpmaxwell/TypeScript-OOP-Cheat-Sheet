@@ -9,9 +9,9 @@ _All of TypeScript's object-oriented keywords and terminology in one place._
 - [Overview](#overview)
 - [Inheritance](#inheritance)
 - [Encapsulation](#encapsulation)
-- [Other Modifiers](#other-modifiers)
 - [Polymorphism](#polymorphism)
 - [Abstract Classes](#abstract-classes)
+- [Other Modifiers](#other-modifiers)
 - [Quick Reference](#quick-reference)
 - [Conclusion](#conclusion)
 
@@ -413,69 +413,6 @@ class Concise {
 
 <p align="center">· · ·</p>
 
-## Other Modifiers
-
-### `static`
-
-<details>
-<summary>Explanation</summary>
-
-A `static` member belongs to the **class itself** rather than to its instances, so you use it without calling `new`. It fits values and helpers that don't depend on any particular instance. For example, every dog is the same species.
-
-</details>
-
-```ts
-class Dog {
-  static species = "Canis familiaris";
-  static count = 0;
-
-  age: number;
-
-  constructor(age: number) {
-    this.age = age;
-    Dog.count++;
-  }
-}
-
-Dog.species; // => 'Canis familiaris'
-Dog.age; // ❌ Property 'age' does not exist on type 'typeof Dog'.
-new Dog(4).species; // ❌ Property 'species' does not exist on type 'Dog'. Did you mean to access the static member 'Dog.species' instead?
-```
-
-### `readonly`
-
-<details>
-<summary>Explanation</summary>
-
-A `readonly` property can be assigned where it's declared or in the constructor, and nowhere else. Keep two things in mind:
-
-- **It's shallow.** You can't reassign a `readonly` property, but you can still mutate the object it holds. For arrays, also use the `readonly string[]` type.
-- **It's compile-time only.** For a guarantee at runtime, use `Object.freeze()` or a getter with no setter.
-
-</details>
-
-```ts
-class Dog {
-  static readonly species = "Canis familiaris";
-  readonly birthDate: Date;
-  readonly tricks: readonly string[];
-
-  constructor(birthDate: Date, tricks: string[]) {
-    this.birthDate = birthDate; // allowed in the constructor
-    this.tricks = tricks;
-  }
-}
-
-const dog = new Dog(new Date(2022, 0, 1), ["sit"]);
-
-Dog.species = "Felis catus"; // ❌ Cannot assign to 'species' because it is a read-only property.
-dog.birthDate = new Date(); // ❌ Cannot assign to 'birthDate' because it is a read-only property.
-dog.birthDate.setFullYear(1999); // compiles: `readonly` is shallow
-dog.tricks.push("roll over"); // ❌ Property 'push' does not exist on type 'readonly string[]'.
-```
-
-<p align="center">· · ·</p>
-
 ## Polymorphism
 
 <details>
@@ -626,6 +563,70 @@ new Animal(3); // ❌ Cannot create an instance of an abstract class.
 | How many per class          | One (`extends`)              | Any number (`implements`)        |
 
 <p align="center">· · ·</p>
+
+## Other Modifiers
+
+### `static`
+
+<details>
+<summary>Explanation</summary>
+
+A `static` member belongs to the **class itself** rather than to its instances, so you use it without calling `new`. It fits values and helpers that don't depend on any particular instance. For example, every dog is the same species.
+
+</details>
+
+```ts
+class Dog {
+  static species = "Canis familiaris";
+  static count = 0;
+
+  age: number;
+
+  constructor(age: number) {
+    this.age = age;
+    Dog.count++;
+  }
+}
+
+Dog.species; // => 'Canis familiaris'
+Dog.age; // ❌ Property 'age' does not exist on type 'typeof Dog'.
+new Dog(4).species; // ❌ Property 'species' does not exist on type 'Dog'. Did you mean to access the static member 'Dog.species' instead?
+```
+
+### `readonly`
+
+<details>
+<summary>Explanation</summary>
+
+A `readonly` property can be assigned where it's declared or in the constructor, and nowhere else. Keep two things in mind:
+
+- **It's shallow.** You can't reassign a `readonly` property, but you can still mutate the object it holds. For arrays, also use the `readonly string[]` type.
+- **It's compile-time only.** For a guarantee at runtime, use `Object.freeze()` or a getter with no setter.
+
+</details>
+
+```ts
+class Dog {
+  static readonly species = "Canis familiaris";
+  readonly birthDate: Date;
+  readonly tricks: readonly string[];
+
+  constructor(birthDate: Date, tricks: string[]) {
+    this.birthDate = birthDate; // allowed in the constructor
+    this.tricks = tricks;
+  }
+}
+
+const dog = new Dog(new Date(2022, 0, 1), ["sit"]);
+
+Dog.species = "Felis catus"; // ❌ Cannot assign to 'species' because it is a read-only property.
+dog.birthDate = new Date(); // ❌ Cannot assign to 'birthDate' because it is a read-only property.
+dog.birthDate.setFullYear(1999); // compiles: `readonly` is shallow
+dog.tricks.push("roll over"); // ❌ Property 'push' does not exist on type 'readonly string[]'.
+```
+
+<p align="center">· · ·</p>
+
 
 ## Quick Reference
 

@@ -2,20 +2,30 @@
 
 _All of TypeScript's object-oriented keywords and terminology in one place._
 
-> Every example compiles under `"strict": true` and `"noImplicitOverride": true`, targeting ES2022. Lines marked ❌ are compile errors on purpose, and each one shows the message TypeScript gives you.
+> **Legend:** ❌ marks a compile error, followed by TypeScript's message. 💥 marks a runtime error. Examples assume `"strict": true` and `"noImplicitOverride": true`.
 
 ## Table of Contents
 
 - [Overview](#overview)
 - [Inheritance](#inheritance)
+  - [`extends`](#extends)
+  - [`super`](#super)
+  - [`override`](#override)
 - [Encapsulation](#encapsulation)
+  - [`public`](#public)
+  - [`private`, `get` & `set`](#private-get--set)
+  - [`#private`: truly private fields](#private-truly-private-fields)
+  - [`protected`](#protected)
 - [Polymorphism](#polymorphism)
+  - [Through subclasses](#through-subclasses)
+  - [`interface` & `implements`](#interface--implements)
 - [Abstract Classes](#abstract-classes)
+  - [`abstract`](#abstract)
 - [Other Modifiers](#other-modifiers)
+  - [`static`](#static)
+  - [`readonly`](#readonly)
 - [Quick Reference](#quick-reference)
 - [Conclusion](#conclusion)
-
-<p align="center">· · ·</p>
 
 ## Overview
 
@@ -305,7 +315,7 @@ fido._name = ""; // ❌ Property '_name' is private and only accessible within c
 
 > **`private` is a compile-time promise only.** The emitted JavaScript has an ordinary `_name` property. It appears in `Object.keys()`, `JSON.stringify()`, and `console.log()`, and TypeScript even allows the escape hatch `fido["_name"] = ""`.
 
-A getter with no matching setter makes a property read-only, and unlike `readonly`, that holds at runtime too.
+A getter with no matching setter makes a property read-only, and unlike [`readonly`](#readonly), that holds at runtime too.
 
 ### `#private`: truly private fields
 
@@ -343,21 +353,21 @@ Dog.isDog(fido); // => true
 Dog.isDog({ name: "Fido" }); // => false: it has the right shape but wasn't built by Dog
 ```
 
-|                                           | `private`                                       | `#private`                                                 |
-| ----------------------------------------- | ----------------------------------------------- | ---------------------------------------------------------- |
-| Enforced by                               | The compiler only                               | The JavaScript engine                                      |
-| Escape hatch                              | `obj["field"]`                                  | None                                                       |
-| Shows up in `JSON.stringify`/`Object.keys` | Yes                                             | No                                                         |
-| Same name in a subclass                   | Compile error                                   | Fine (each class gets its own slot)                        |
-| Works through a `Proxy`                   | Yes                                             | No (accessing it through a proxy throws a `TypeError`)     |
-| Target requirements                       | None                                            | ES2022, or compiled down to `WeakMap`s for ES2015+ targets |
+|                                            | `private`          | `#private`                                                 |
+| ------------------------------------------ | ------------------ | ---------------------------------------------------------- |
+| Enforced by                                | The compiler only  | The JavaScript engine                                      |
+| Escape hatch                               | `obj["field"]`     | None                                                       |
+| Shows up in `JSON.stringify`/`Object.keys` | Yes                | No                                                         |
+| Same name in a subclass                    | Compile error      | Fine (each class gets its own slot)                        |
+| Works through a `Proxy`                    | Yes                | No (accessing it through a proxy throws a `TypeError`)     |
+| Target requirements                        | None               | ES2022, or compiled down to `WeakMap`s for ES2015+ targets |
 
 ### `protected`
 
 <details>
 <summary>Explanation</summary>
 
-`protected` sits between the two. The class itself **and its subclasses** can use a protected member, but outside code can't. It fits helpers that are part of the contract between a parent and its children but not part of the public API.
+`protected` sits between `public` and `private`. The class itself **and its subclasses** can use a protected member, but outside code can't. It fits helpers that are part of the contract between a parent and its children but not part of the public API.
 
 </details>
 
@@ -386,7 +396,7 @@ dog.repeatSound("meow"); // ❌ Property 'repeatSound' is protected and only acc
 <details>
 <summary>Explanation</summary>
 
-Adding a modifier to a constructor parameter (`public`, `private`, `protected`, or `readonly`) declares the property and assigns it in a single step. The two classes below are equivalent:
+Adding a modifier to a constructor parameter (`public`, `private`, `protected`, or [`readonly`](#readonly)) declares the property and assigns it in a single step. The two classes below are equivalent:
 
 </details>
 
@@ -409,6 +419,7 @@ class Concise {
 }
 ```
 
+> [!IMPORTANT]
 > Parameter properties are one of the few TypeScript features that **generate** JavaScript code. As a result, they're rejected under `--erasableSyntaxOnly` (TypeScript 5.8+) and by Node's built-in type stripping. If you target either one, write the long form.
 
 <p align="center">· · ·</p>
@@ -424,7 +435,7 @@ _Polymorphism_ means "many forms." Code written against one type works with any 
 
 ### Through subclasses
 
-Using `Animal`, `Dog`, and `Cat` from [Inheritance](#inheritance), the loop below never checks which animal it has:
+Using `Animal`, `Dog`, and `Cat` from the [Inheritance example](#example), the loop below never checks which animal it has:
 
 ```ts
 const animals: Animal[] = [new Dog(3, "Beagle", true), new Cat(5, "Siamese")];
@@ -555,12 +566,12 @@ new Animal(3); // ❌ Cannot create an instance of an abstract class.
 
 > **Pitfall:** Don't call abstract members from the parent's constructor. The parent's constructor finishes before the subclass initializes its fields, so calling `this.describe()` inside `Animal`'s constructor would print `undefined` for `species`.
 
-|                             | Abstract class               | Interface                        |
-| --------------------------- | ---------------------------- | -------------------------------- |
-| Exists at runtime           | Yes (`instanceof` works)     | No, it's erased                  |
-| Can contain implementation  | Yes                          | No                               |
-| Constructors & field values | Yes                          | No                               |
-| How many per class          | One (`extends`)              | Any number (`implements`)        |
+|                             | Abstract class           | Interface                 |
+| --------------------------- | ------------------------ | ------------------------- |
+| Exists at runtime           | Yes (`instanceof` works) | No, it's erased           |
+| Can contain implementation  | Yes                      | No                        |
+| Constructors & field values | Yes                      | No                        |
+| How many per class          | One (`extends`)          | Any number (`implements`) |
 
 <p align="center">· · ·</p>
 
@@ -629,36 +640,21 @@ dog.tricks.push("roll over"); // ❌ Property 'push' does not exist on type 'rea
 
 ## Quick Reference
 
-| Keyword                  | What it does                                                    | Enforced at      |
-| ------------------------ | --------------------------------------------------------------- | ---------------- |
-| `class` / `new`          | Declares a class / creates an instance                          | Runtime (JS)     |
-| `constructor`            | Initializes a new instance                                      | Runtime (JS)     |
-| `extends`                | Inherits from one parent class                                  | Runtime (JS)     |
-| `super`                  | Calls the parent's constructor or methods                       | Runtime (JS)     |
-| `override`               | Marks a method as replacing a parent method                     | Compile time     |
-| `public`                 | Accessible everywhere (the default)                             | Compile time     |
-| `protected`              | Accessible in the class and its subclasses                      | Compile time     |
-| `private`                | Accessible only in the class                                    | Compile time     |
-| `#field`                 | Accessible only in the class, guaranteed                        | Runtime (JS)     |
-| `get` / `set`            | Run code when a property is read or assigned                    | Runtime (JS)     |
-| `static`                 | Belongs to the class, not its instances                         | Runtime (JS)     |
-| `readonly`               | Can't be reassigned after construction (shallow)                | Compile time     |
-| `interface`              | Describes a shape                                               | Compile time     |
-| `implements`             | Checks that a class matches an interface                        | Compile time     |
-| `abstract`               | Must be implemented by a subclass; can't be instantiated        | Compile time     |
-| Parameter properties     | Declare and assign a property from a constructor parameter      | Compile time (generates code) |
-
-<p align="center">· · ·</p>
-
-## Conclusion
-
-TypeScript's object-oriented features are JavaScript classes plus a compile-time layer of checks. Once you know which side of that line a keyword sits on, most of its quirks make sense. `private` can be bypassed but `#private` can't, `readonly` doesn't freeze anything, and an `interface` can't be checked at runtime.
-
-A class is one tool among several. When an object has no lifecycle or mutable state to protect, a module, a factory function, or a plain object with a type often does the job with less ceremony.
-
-**Further reading**
-
-- [TypeScript Handbook: Classes](https://www.typescriptlang.org/docs/handbook/2/classes.html)
-- [TypeScript Handbook: Object Types](https://www.typescriptlang.org/docs/handbook/2/objects.html)
-- [MDN: Private properties](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes/Private_properties)
-- [_The JavaScript Object Paradigm and Prototypes Explained Simply_](https://levelup.gitconnected.com/the-javascript-object-paradigm-and-prototypes-explained-simply-e9cb9eaa49aa)
+| Keyword              | What it does                                               | Enforced at                   |
+| -------------------- | ---------------------------------------------------------- | ----------------------------- |
+| `class` / `new`      | Declares a class / creates an instance                     | Runtime (JS)                  |
+| `constructor`        | Initializes a new instance                                 | Runtime (JS)                  |
+| `extends`            | Inherits from one parent class                             | Runtime (JS)                  |
+| `super`              | Calls the parent's constructor or methods                  | Runtime (JS)                  |
+| `override`           | Marks a method as replacing a parent method                | Compile time                  |
+| `public`             | Accessible everywhere (the default)                        | Compile time                  |
+| `private`            | Accessible only in the class                               | Compile time                  |
+| `#field`             | Accessible only in the class, guaranteed                   | Runtime (JS)                  |
+| `get` / `set`        | Run code when a property is read or assigned               | Runtime (JS)                  |
+| `protected`          | Accessible in the class and its subclasses                 | Compile time                  |
+| Parameter properties | Declare and assign a property from a constructor parameter | Compile time (generates code) |
+| `interface`          | Describes a shape                                          | Compile time                  |
+| `implements`         | Checks that a class matches an interface                   | Compile time                  |
+| `abstract`           | Must be implemented by a subclass; can't be instantiated   | Compile time                  |
+| `static`             | Belongs to the class, not its instances                    | Runtime (JS)                  |
+| `readonly`           | Can't be reassigned after construction (shallow)           | Compile time                  |

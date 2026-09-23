@@ -1,4 +1,4 @@
-# TypeScript Object-Oriented Cheat Sheet
+# TypeScript Object-Oriented-Programming Cheat Sheet
 
 _All the major parts of TypeScript object-oriented keywords/terminology in one place_
 

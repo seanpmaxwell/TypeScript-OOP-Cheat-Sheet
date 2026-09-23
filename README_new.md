@@ -627,7 +627,6 @@ dog.tricks.push("roll over"); // ❌ Property 'push' does not exist on type 'rea
 
 <p align="center">· · ·</p>
 
-
 ## Quick Reference
 
 | Keyword                  | What it does                                                    | Enforced at      |
@@ -648,6 +647,8 @@ dog.tricks.push("roll over"); // ❌ Property 'push' does not exist on type 'rea
 | `implements`             | Checks that a class matches an interface                        | Compile time     |
 | `abstract`               | Must be implemented by a subclass; can't be instantiated        | Compile time     |
 | Parameter properties     | Declare and assign a property from a constructor parameter      | Compile time (generates code) |
+
+<p align="center">· · ·</p>
 
 ## Conclusion
 

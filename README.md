@@ -327,14 +327,15 @@ TypeScript classes have built-in `get` and `set` accessors, which trigger our ge
 <p align="center">· · ·</p>
 
 
-
 ## Polymorphism
 
 #### `interface`
 
+<details>
+<summary>Explanation</summary>
 Whenever we want to say that an object being passed around has a specific set of attributes, we can use an interface. Interfaces are nifty little tools that come in handy in several situations.
-
 The most immediate one that comes to mind is testing. Suppose we have a method in our `Dog` class that makes an I/O call, and we want to unit test a method in our `PetStore` class that calls it. We don't want to fire an I/O call every time a unit test runs, but we still need an object that satisfies the `Dog` type. Let's create an `IDog` interface that specifies a method for both the real class and the mock class we create for our unit test.
+</details>
 
 ```ts
 interface IDog {
@@ -375,9 +376,12 @@ This is only one small example of using interfaces; there are plenty more uses. 
 
 #### `abstract`
 
+<details>
+<summary>Explanation</summary>
 Think of abstract classes as a cross between regular parent classes and interfaces. Like interfaces, abstract classes define attributes for other classes, but unlike interfaces, some of their methods may contain an implementation. A method without an implementation must be marked `abstract`, and so must its containing class. Abstract classes cannot be instantiated (you can't use `new` on them) and are useful when you know you'll never need the parent class directly.
 
 Both cats and dogs have an `age` property, and we want to know each one's age in human years. The way to calculate this differs depending on the animal, though, so let's use an abstract class.
+</details>
 
 ```ts
 abstract class Animal {

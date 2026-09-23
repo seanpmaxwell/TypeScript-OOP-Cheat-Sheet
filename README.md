@@ -62,19 +62,49 @@ var Spot = new Dog(2, "Labrador");
 
 
 <details>
-<summary>TypeScript Classes vs. JavaScript Classes</summary>
-  
+<summary>TypeScript Classes vs JavaScript Classes</summary>
 TypeScript objects are just syntactic sugar for JavaScript function-objects. There's a lot of repetitive code involved in using function-objects as classes in JavaScript, which is why `class` was introduced in ES6. TypeScript takes ES6 classes to a higher plane of reality by adding not only types but also object features such as `public`, `private`, `abstract`, etc. If you're interested in learning more about the quirks of JavaScript function-objects (which I highly recommend), please check out my Medium article [here](https://levelup.gitconnected.com/the-javascript-object-paradigm-and-prototypes-explained-simply-e9cb9eaa49aa).
+</details>
+
+
+<details>
+<summary>When to use classes</summary>
+  
+##### `When a class fits`
+
+- The object has internal state its methods update over time.
+- You need to extend a class you do not control, such as `Error`.
+
+##### `When to use something simpler`
+
+Avoid a class:
+
+- **As a namespace.** Use an object literal.
+- **To assemble a configured object with no lifecycle or need for `this`.** Use a factory function.
+- **To wrap I/O data** If we try to wrap IO-data with classes, this could cause unexpected behavior when data is serialized. 
 
 </details>
 
 <p align="center">· · ·</p>
 
+
 ## Inheritance
 
-Now that you know how to make objects and can see how they work under the hood in JavaScript, let's start learning about TypeScript inheritance. In our PetStore program, we're selling dogs and cats, but there could be different breeds of dogs and cats, right? Dogs and cats might also share some of the same attributes, like `age` and `weight`. Superclasses (a.k.a. parent classes) allow related objects to be grouped together so that they can inherit similar attributes. To inherit from a parent class, we use the `extends` keyword. When you extend a class, all of its attributes and methods are passed down. Instead of creating `age` and `weight` each time we add a new animal to our pet store, we can now just expand upon a parent `Animal` class. Multi-level inheritance is also possible by extending child classes.
+#### `extends`
 
+<details>
+<summary>Explanation</summary>
+To inherit from a parent class, we use the `extends` keyword. When you extend a class, all of its attributes and methods are passed down. Instead of creating `age` and `weight` each time we add a new animal to our pet store, we can now just expand upon a parent `Animal` class. Multi-level inheritance is also possible by extending child classes.
+</details>
+
+#### `super`
+
+<details>
+<summary>Explanation</summary>
 The `super` keyword serves two roles in inheritance. First, it acts as a function that calls the parent class's constructor. It has to be called before `this` is used in the child class's constructor. Second, it allows us to access methods (but NOT attributes) of the parent class.
+</details>
+
+#### Examples
 
 `Animal` is the parent class of `Dog`:
 
@@ -94,11 +124,7 @@ class Animal {
     console.log(sound);
   }
 }
-```
 
-Basic inheritance using `super`:
-
-```ts
 class Dog extends Animal {
   playsFetch: boolean;
 
@@ -127,15 +153,20 @@ class Cat extends Animal {
 }
 ```
 
-JavaScript inheritance works the same way, but TypeScript adds access-control modifiers when working with parent classes. Declaring class-level variables outside of methods (class fields) wasn't possible in ES6, but modern JavaScript supports it as of ES2022, along with truly private `#fields`.
+> JavaScript inheritance works the same way, but TypeScript adds access-control modifiers when working with parent classes. Declaring class-level variables outside of methods (class fields) wasn't possible in ES6, but modern JavaScript supports it as of ES2022, along with truly private `#fields`.
 
 <p align="center">· · ·</p>
+
 
 ## Encapsulation
 
 #### `public`
 
+<details>
+<summary>Explanation</summary>
 Suppose our PetStore program has a class named `PetStore`. If this class wants to call methods on our `Dog` objects, then those methods will need to be marked `public`. When a method or variable is public, it can be accessed by other parts of our program. Leaving off a modifier on a variable or method is the same as marking it `public`.
+</details>
+
 
 ```ts
 class Dog {
@@ -155,7 +186,10 @@ class PetStore {
 
 #### `private`
 
-Allowing other coders to directly access an object's attributes generally isn't a good idea, though. It's better to use getters and setters to access and modify class properties, so we can run some logic when setting a value and prevent errors. For example, a dog's name shouldn't be falsy, and it should be under a certain length; a realistic dog name would never be more than 10–20 characters. To make a class variable or method accessible only within that class, we mark it `private`. TypeScript classes have built-in `get` and `set` accessors, which trigger our getter and setter whenever the property is accessed or assigned.
+<details>
+<summary>Explanation</summary>
+Allowing other coders to directly access an object's attributes generally isn't a good idea, though. It's better to use getters and setters to access and modify class properties, so we can run some logic when setting a value and prevent errors. For example, a dog's name shouldn't be falsy, and it should be under a certain length; a realistic dog name would never be more than 10–20 characters. To make a class variable or method accessible only within that class, we mark it `private`. 
+</details>
 
 ```ts
 class Dog {
@@ -213,7 +247,10 @@ class PetStore {
 
 #### `protected`
 
+<details>
+<summary>Explanation</summary>
 Lastly, let's look at the `protected` keyword. Protected means that a variable or method can only be accessed within the class itself and its child classes. Remember the `makeSound_` method of the `Animal` parent class? We shouldn't be able to call that method externally on `Animal` or any class that inherits from it, because not all animals make sounds. I like to append a trailing underscore to protected members, although it's not a convention.
+</details>
 
 ```ts
 class Animal {
@@ -243,11 +280,14 @@ class PetStore {
 
 <p align="center">· · ·</p>
 
-## Other Modifiers
+### Encapsulation Continued... other Access Modifiers
+
+<details>
+<summary>Explanation</summary>
+There are two other modifiers that are important to mention when talking about TypeScript classes: `static` and `readonly`. If we want to access a property on a class without going through the trouble of creating an instance-object (calling the class with `new`), we can mark it `static`, and it will be set on the class (function-object) itself. This is useful for methods and class variables that don't depend on any dynamic property. For example, a dog will always be the same species.
+</details>
 
 #### `static`
-
-There are two other modifiers that are important to mention when talking about TypeScript classes: `static` and `readonly`. If we want to access a property on a class without going through the trouble of creating an instance-object (calling the class with `new`), we can mark it `static`, and it will be set on the class (function-object) itself. This is useful for methods and class variables that don't depend on any dynamic property. For example, a dog will always be the same species.
 
 ```ts
 class Dog {
@@ -265,7 +305,7 @@ class PetStore {
 
 #### `readonly`
 
-The `readonly` keyword is pretty self-explanatory. It's used for class-level variables and means that the value cannot be reassigned. Values that are initialized when the class is created and that you know will never change should be `readonly`. Our `Dog` class's `species` property is a good example: no matter what attributes we assign to a dog, it will always be the same species.
+The `readonly` keyword is pretty self-explanatory. It's used for class-level variables and means that the value cannot be reassigned.
 
 ```ts
 class Dog {
@@ -280,7 +320,13 @@ class PetStore {
 }
 ```
 
+#### `get`/`set`
+
+TypeScript classes have built-in `get` and `set` accessors, which trigger our getter and setter whenever the property is accessed or assigned.
+
 <p align="center">· · ·</p>
+
+
 
 ## Polymorphism
 
